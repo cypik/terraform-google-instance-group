@@ -1,3 +1,15 @@
+module "labels" {
+  source      = "git::https://github.com/opz0/terraform-gcp-labels.git?ref=v1.0.0"
+  name        = var.name
+  environment = var.environment
+  label_order = var.label_order
+  managedby   = var.managedby
+  repository  = var.repository
+}
+
+data "google_client_config" "current" {
+}
+
 locals {
   healthchecks = concat(
     google_compute_health_check.https[*].self_link,
@@ -9,14 +21,14 @@ locals {
 }
 
 data "google_compute_zones" "available" {
-  project = var.project_id
+  project = data.google_client_config.current.project
   region  = var.region
 }
 
 resource "google_compute_region_instance_group_manager" "mig" {
   provider           = google-beta
   base_instance_name = var.hostname
-  project            = var.project_id
+  project            = data.google_client_config.current.project
 
   version {
     name              = "appserver"
@@ -24,7 +36,7 @@ resource "google_compute_region_instance_group_manager" "mig" {
 
   }
 
-  name   = var.mig_name == "" ? "${var.hostname}-mig" : var.mig_name
+  name   = format("%s", module.labels.id) == "" ? "${format("%s", module.labels.id)}-mig" : format("%s", module.labels.id)
   region = var.region
   dynamic "named_port" {
     for_each = var.named_ports
@@ -102,8 +114,8 @@ resource "google_compute_region_instance_group_manager" "mig" {
 resource "google_compute_region_autoscaler" "autoscaler" {
   provider = google
   count    = var.autoscaling_enabled ? 1 : 0
-  name     = var.autoscaler_name == "" ? "${var.hostname}-autoscaler" : var.autoscaler_name
-  project  = var.project_id
+  name     = format("%s", module.labels.id) == "" ? "${format("%s", module.labels.id)}-autoscaler" : format("%s", module.labels.id)
+  project  = data.google_client_config.current.project
   region   = var.region
 
   target = google_compute_region_instance_group_manager.mig.self_link
@@ -160,8 +172,8 @@ resource "google_compute_region_autoscaler" "autoscaler" {
 
 resource "google_compute_health_check" "https" {
   count   = var.health_check["type"] == "https" ? 1 : 0
-  project = var.project_id
-  name    = var.health_check_name == "" ? "${var.hostname}-https-healthcheck" : var.health_check_name
+  project = data.google_client_config.current.project
+  name    = format("%s", module.labels.id) == "" ? "${format("%s", module.labels.id)}-https-healthcheck" : format("%s", module.labels.id)
 
   check_interval_sec  = var.health_check["check_interval_sec"]
   healthy_threshold   = var.health_check["healthy_threshold"]
@@ -179,8 +191,8 @@ resource "google_compute_health_check" "https" {
 
 resource "google_compute_health_check" "http" {
   count   = var.health_check["type"] == "http" ? 1 : 0
-  project = var.project_id
-  name    = var.health_check_name == "" ? "${var.hostname}-http-healthcheck" : var.health_check_name
+  project = data.google_client_config.current.project
+  name    = format("%s", module.labels.id) == "" ? "${format("%s", module.labels.id)}-http-healthcheck" : format("%s", module.labels.id)
 
   check_interval_sec  = var.health_check["check_interval_sec"]
   healthy_threshold   = var.health_check["healthy_threshold"]
@@ -202,8 +214,8 @@ resource "google_compute_health_check" "http" {
 
 resource "google_compute_health_check" "tcp" {
   count   = var.health_check["type"] == "tcp" ? 1 : 0
-  project = var.project_id
-  name    = var.health_check_name == "" ? "${var.hostname}-tcp-healthcheck" : var.health_check_name
+  project = data.google_client_config.current.project
+  name    = format("%s", module.labels.id) == "" ? "${format("%s", module.labels.id)}-tcp-healthcheck" : format("%s", module.labels.id)
 
   timeout_sec         = var.health_check["timeout_sec"]
   check_interval_sec  = var.health_check["check_interval_sec"]

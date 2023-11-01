@@ -1,18 +1,7 @@
-variable "hostname" {
-  description = "Hostname prefix for instances."
-  default     = "instance-group"
-}
-
 variable "region" {
   description = "The GCP region where instances will be deployed."
   type        = string
   default     = "asia-northeast1"
-}
-
-variable "project_id" {
-  description = "The GCP project to use for integration tests"
-  type        = string
-  default     = "opz0-xxxxx"
 }
 
 variable "named_ports" {
@@ -22,102 +11,6 @@ variable "named_ports" {
     port = number
   }))
   default = []
-}
-
-variable "machine_type" {
-  description = "Machine type to create, e.g. n1-standard-1"
-  default     = "n1-standard-1"
-}
-
-variable "can_ip_forward" {
-  description = "Enable IP forwarding, for NAT instances for example"
-  default     = "false"
-}
-
-variable "tags" {
-  type        = list(string)
-  description = "Network tags, provided as a list"
-  default     = []
-}
-
-variable "labels" {
-  type        = map(string)
-  description = "Labels, provided as a map"
-  default     = {}
-}
-
-variable "source_image" {
-  description = "Source disk image. If neither source_image nor source_image_family is specified, defaults to the latest public CentOS image."
-  default     = ""
-}
-
-variable "source_image_family" {
-  description = "Source image family. If neither source_image nor source_image_family is specified, defaults to the latest public CentOS image."
-  default     = ""
-}
-
-variable "source_image_project" {
-  description = "Project where the source image comes from"
-  default     = ""
-}
-
-variable "disk_size_gb" {
-  description = "Disk size in GB"
-  default     = "100"
-}
-
-variable "disk_type" {
-  description = "Disk type, can be either pd-ssd, local-ssd, or pd-standard"
-  default     = "pd-standard"
-}
-
-variable "disk_labels" {
-  description = "Labels to be assigned to boot disk, provided as a map"
-  default     = { "foo" : "bar" }
-}
-
-variable "auto_delete" {
-  description = "Whether or not the disk should be auto-deleted"
-  default     = "true"
-}
-
-variable "additional_disks" {
-  description = "List of maps of additional disks. See https://www.terraform.io/docs/providers/google/r/compute_instance_template#disk_name"
-  type = list(object({
-    disk_name    = string
-    device_name  = string
-    auto_delete  = bool
-    boot         = bool
-    disk_size_gb = number
-    disk_type    = string
-    disk_labels  = map(string)
-  }))
-  default = []
-}
-
-variable "startup_script" {
-  description = "User startup script to run when instances spin up"
-  default     = ""
-}
-
-variable "metadata" {
-  type        = map(string)
-  description = "Metadata, provided as a map"
-  default     = {}
-}
-
-variable "service_account" {
-  default = null
-  type = object({
-    email  = string
-    scopes = set(string)
-  })
-  description = "Service account to attach to the instance. See https://www.terraform.io/docs/providers/google/r/compute_instance_template#service_account."
-}
-
-variable "target_size" {
-  description = "The target number of running instances for this managed or unmanaged instance group. This value should always be explicitly set unless this resource is attached to an autoscaler, in which case it should never be set."
-  default     = 1
 }
 
 variable "target_pools" {
@@ -180,21 +73,6 @@ variable "health_check" {
     host                = ""
     enable_logging      = false
   }
-}
-
-variable "max_replicas" {
-  description = "The maximum number of instances that the autoscaler can scale up to. This is required when creating or updating an autoscaler. The maximum number of replicas should not be lower than minimal number of replicas."
-  default     = 10
-}
-
-variable "min_replicas" {
-  description = "The minimum number of replicas that the autoscaler can scale down to. This cannot be less than 0."
-  default     = 2
-}
-
-variable "cooldown_period" {
-  description = "The number of seconds that the autoscaler should wait before it starts collecting information from a new instance."
-  default     = 60
 }
 
 variable "autoscaling_cpu" {

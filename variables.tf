@@ -1,19 +1,37 @@
-variable "project_id" {
+variable "name" {
   type        = string
-  description = "The GCP project ID"
-  default     = null
+  default     = "test"
+  description = "Name of the resource. Provided by the client when the resource is created. "
+}
+
+variable "environment" {
+  type        = string
+  default     = ""
+  description = "Environment (e.g. `prod`, `dev`, `staging`)."
+}
+
+variable "label_order" {
+  type        = list(any)
+  default     = ["name", "environment"]
+  description = "Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] ."
+}
+
+variable "managedby" {
+  type        = string
+  default     = ""
+  description = "ManagedBy, eg 'Opz0'."
+}
+
+variable "repository" {
+  type        = string
+  default     = ""
+  description = "Terraform current module repo"
 }
 
 variable "hostname" {
   description = "Hostname prefix for instances"
   type        = string
   default     = "default"
-}
-
-variable "mig_name" {
-  type        = string
-  description = "Managed instance group name. When variable is empty, name will be derived from var.hostname."
-  default     = ""
 }
 
 variable "region" {
@@ -85,12 +103,6 @@ variable "update_policy" {
   default = []
 }
 
-variable "health_check_name" {
-  type        = string
-  description = "Health check name. When variable is empty, name will be derived from var.hostname."
-  default     = ""
-}
-
 variable "health_check" {
   description = "Health check to determine whether instances are responsive and able to do work"
   type = object({
@@ -123,12 +135,6 @@ variable "health_check" {
     host                = ""
     enable_logging      = false
   }
-}
-
-variable "autoscaler_name" {
-  type        = string
-  description = "Autoscaler name. When variable is empty, name will be derived from var.hostname."
-  default     = ""
 }
 
 variable "autoscaling_enabled" {
