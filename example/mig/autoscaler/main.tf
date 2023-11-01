@@ -1,5 +1,5 @@
 provider "google" {
-  project = "opz0-xxxxx"
+  project = "opz0-397319"
   region  = "asia-northeast1"
   zone    = "asia-northeast1-a"
 }
@@ -11,8 +11,6 @@ module "vpc" {
   source                                    = "git::git@github.com:opz0/terraform-gcp-vpc.git?ref=master"
   name                                      = "app"
   environment                               = "test"
-  label_order                               = ["name", "environment"]
-  project_id                                = "opz0-xxxxx"
   network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
 }
 
@@ -25,7 +23,6 @@ module "subnet" {
   environment   = "test"
   gcp_region    = "asia-northeast1"
   network       = module.vpc.vpc_id
-  project_id    = "opz0-xxxxx"
   source_ranges = ["10.10.0.0/16"]
 }
 
@@ -38,7 +35,6 @@ module "instance_template" {
   name                 = "template"
   environment          = "test"
   region               = "asia-northeast1"
-  project_id           = "opz0-xxxxx"
   source_image         = "ubuntu-2204-jammy-v20230908"
   source_image_family  = "ubuntu-2204-lts"
   source_image_project = "ubuntu-os-cloud"
@@ -61,9 +57,9 @@ module "instance_template" {
 #####==============================================================================
 module "mig" {
   source              = "../../../"
-  project_id          = var.project_id
   region              = var.region
-  hostname            = "mig-autoscaler"
+  hostname            = "test"
+  environment         = "mig-autoscaler"
   autoscaling_enabled = var.autoscaling_enabled
   min_replicas        = var.min_replicas
   autoscaling_cpu     = var.autoscaling_cpu
