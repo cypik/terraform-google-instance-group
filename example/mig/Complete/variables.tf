@@ -114,5 +114,5 @@ variable "autoscaling_scale_in_control" {
 variable "autoscaling_enabled" {
   description = "Creates an autoscaler for the managed instance group"
   type        = bool
-  default     = false
+  default     = true
 }
