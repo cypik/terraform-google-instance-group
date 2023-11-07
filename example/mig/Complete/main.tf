@@ -4,33 +4,33 @@ provider "google" {
   zone    = "asia-northeast1-a"
 }
 
-######==============================================================================
-###### vpc module call.
-######==============================================================================
+#####==============================================================================
+##### vpc module call.
+#####==============================================================================
 module "vpc" {
-  source                                    = "git::git@github.com:opz0/terraform-gcp-vpc.git?ref=master"
+  source                                    = "git::https://github.com/opz0/terraform-gcp-vpc.git?ref=v1.0.0"
   name                                      = "app"
   environment                               = "test"
   network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
 }
 
-######==============================================================================
-###### subnet module call.
-######==============================================================================
+#####==============================================================================
+##### subnet module call.
+#####==============================================================================
 module "subnet" {
-  source        = "git::git@github.com:opz0/terraform-gcp-subnet.git?ref=master"
+  source        = "git::https://github.com/opz0/terraform-gcp-subnet.git?ref=v1.0.0"
   name          = "subnet"
   environment   = "test"
   gcp_region    = "asia-northeast1"
   network       = module.vpc.vpc_id
-  source_ranges = ["10.10.0.0/16"]
+  ip_cidr_range = "10.10.0.0/16"
 }
 
 #####==============================================================================
 ##### instance_template module call.
 #####==============================================================================
 module "instance_template" {
-  source               = "git::git@github.com:opz0/terraform-gcp-template-instance.git?ref=master"
+  source               = "git::https://github.com/opz0/terraform-gcp-template-instance.git?ref=v1.0.0"
   instance_template    = true
   name                 = "template"
   environment          = "test"
@@ -42,7 +42,7 @@ module "instance_template" {
   service_account      = null
   metadata = {
     ssh-keys = <<EOF
-        dev:ssh-rsa +j/FmgC27u/+L6ihYrPhcx5////+/+/6wih87hbyvUsE0y1fyds3kD9zVWQNzLd2BW4QZ/ZoaYRVY365S8LEqGxUVRbuyzni+51lj99yDW8X8W/zKU+lCBaggRjlkx4Q3NWS1gefgv3k/3mwt2y+PDQMU= suresh@suresh
+        dev:ssh-rsa +j/FmgC27u/+L6ihYrPhcx51lj99yDW8X8W/zKU+lCBaggRjlkx4Q3NWS1gefgv3k/3mwt2y+PDQMU= suresh@suresh
 
       EOF
   }
@@ -59,6 +59,7 @@ module "mig" {
   source                       = "../../../"
   hostname                     = "test"
   environment                  = "instance-group"
+  max_replicas                 = 2
   region                       = var.region
   target_pools                 = var.target_pools
   distribution_policy_zones    = var.distribution_policy_zones
