@@ -14,26 +14,11 @@ This project deploys a Google Cloud infrastructure using Terraform to create ins
 To use this module, you should have Terraform installed and configured for GCP. This module provides the necessary Terraform configuration for creating GCP resources, and you can customize the inputs as needed. Below is an example of how to use this module:
 ### Examples
 
-## Example: mig-autoscaler
-
-```hcl
-module "mig" {
-  source              = "git::https://github.com/opz0/terraform-gcp-instance-group.git?ref=v1.0.0"
-  region              = var.region
-  hostname            = "test"
-  environment         = "mig-autoscaler"
-  autoscaling_enabled = var.autoscaling_enabled
-  min_replicas        = var.min_replicas
-  autoscaling_cpu     = var.autoscaling_cpu
-  instance_template   = module.instance_template.self_link_unique
-}
-```
-
 ## Example: mig-complete
 
 ```hcl
 module "mig" {
-  source                       = "git::https://github.com/opz0/terraform-gcp-instance-group.git?ref=v1.0.0"
+  source                       = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
   hostname                     = "test"
   environment                  = "instance-group"
   max_replicas                 = 2
@@ -51,11 +36,26 @@ module "mig" {
   instance_template            = module.instance_template.self_link_unique
 }
 ```
+
+## Example: mig-autoscaler
+
+```hcl
+module "mig" {
+  source              = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
+  region              = var.region
+  hostname            = "test"
+  environment         = "mig-autoscaler"
+  autoscaling_enabled = var.autoscaling_enabled
+  min_replicas        = var.min_replicas
+  autoscaling_cpu     = var.autoscaling_cpu
+  instance_template   = module.instance_template.self_link_unique
+}
+```
 ## Example: mig-healthcheck
 
 ```hcl
 module "mig" {
-  source              = "git::https://github.com/opz0/terraform-gcp-instance-group.git?ref=v1.0.0"
+  source              = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
   instance_template   = module.instance_template.self_link_unique
   region              = "asia-northeast1"
   autoscaling_enabled = true
@@ -91,7 +91,7 @@ module "mig" {
 
 ```hcl
 module "mig" {
-  source              = "git::https://github.com/opz0/terraform-gcp-instance-group.git?ref=v1.0.0"
+  source              = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
   region              = "asia-northeast1"
   target_size         = 2
   hostname            = "test"
@@ -111,33 +111,33 @@ This example demonstrates how to create various GCP resources using the provided
 
 ## Module Inputs
 
-- 'name'  : The name of the service account.
-- 'environment': The environment type.
-- 'project_id' : The GCP project ID.
-- 'region': A reference to the region where the regional forwarding rule resides.
-- 'min_replicas': The minimum number of replicas that the autoscaler can scale down to.
-- 'autoscaling_cpu' : Defines the CPU utilization policy.
-- 'health_check' : The health check resource that signals autohealing.
-- 'instance_template' : The full URL to an instance template from which all new instances of this version will be created.
-- 'named_ports' : The named port configuration.
-- 'target_pools' :  The full URL of all target pools to which new instances in the group are added.
-- 'autoscaling_lb' : Configuration parameters of autoscaling based on a load balancer.
-- 'min_replicas' : The minimum number of replicas that the autoscaler can scale down to.
+- `name`  : The name of the service account.
+- `environment` : The environment type.
+- `project_id` : The GCP project ID.
+- `region`: A reference to the region where the regional forwarding rule resides.
+- `min_replicas`: The minimum number of replicas that the autoscaler can scale down to.
+- `autoscaling_cpu` : Defines the CPU utilization policy.
+- `health_check` : The health check resource that signals autohealing.
+- `instance_template` : The full URL to an instance template from which all new instances of this version will be created.
+- `named_ports` : The named port configuration.
+- `target_pools` :  The full URL of all target pools to which new instances in the group are added.
+- `autoscaling_lb` : Configuration parameters of autoscaling based on a load balancer.
+- `min_replicas` : The minimum number of replicas that the autoscaler can scale down to.
 
 ## Module Outputs
 Each module may have specific outputs. You can retrieve these outputs by referencing the module in your Terraform configuration.
 
-- 'id' :  An identifier for the resource with format.
-- 'self_link' : The URI of the created resource.
-- 'fingerprint' : The fingerprint of the instance group manager.
-- 'instance_group':The full URL of the instance group created by the manager.
-- 'health_check_self_links' : The URL of the created resource.
+- `id` :  An identifier for the resource with format.
+- `self_link` : The URI of the created resource.
+- `fingerprint` : The fingerprint of the instance group manager.
+- `instance_group` :The full URL of the instance group created by the manager.
+- `health_check_self_links` : The URL of the created resource.
 
 ## Examples
-For detailed examples on how to use this module, please refer to the 'examples' directory within this repository.
+For detailed examples on how to use this module, please refer to the [examples](https://github.com/cypik/terraform-gcp-instance-group/blob/master/example/mig) directory within this repository.
 
 ## Author
 Your Name Replace '[License Name]' and '[Your Name]' with the appropriate license and your information. Feel free to expand this README with additional details or usage instructions as needed for your specific use case.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/opz0/terraform-gcp-instance-group/blob/master/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/cypik/terraform-gcp-instance-group/blob/master/LICENSE) file for details.
