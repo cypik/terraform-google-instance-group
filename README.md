@@ -1,4 +1,4 @@
-# terraform-gcp-instance-group
+# Terraform-gcp-instance-group
 # Google Cloud Infrastructure Provisioning with Terraform
 ## Table of Contents
 
@@ -9,19 +9,20 @@
 - [License](#license)
 
 ## Introduction
-This project deploys a Google Cloud infrastructure using Terraform to create instance-group .
+This project deploys a Google Cloud infrastructure using Terraform to create **instance-group** .
 ## Usage
 To use this module, you should have Terraform installed and configured for GCP. This module provides the necessary Terraform configuration for creating GCP resources, and you can customize the inputs as needed. Below is an example of how to use this module:
 ### Examples
 
-## Example: mig-complete
+## Example: _mig-complete_
 
 ```hcl
 module "mig" {
   source                       = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
   hostname                     = "test"
   environment                  = "instance-group"
-  max_replicas                 = 2
+  min_replicas                 = var.min_replicas
+  max_replicas                 = var.max_replicas
   region                       = var.region
   target_pools                 = var.target_pools
   distribution_policy_zones    = var.distribution_policy_zones
@@ -37,7 +38,7 @@ module "mig" {
 }
 ```
 
-## Example: mig-autoscaler
+## Example: _mig-autoscaler_
 
 ```hcl
 module "mig" {
@@ -51,7 +52,7 @@ module "mig" {
   instance_template   = module.instance_template.self_link_unique
 }
 ```
-## Example: mig-healthcheck
+## Example: _mig-healthcheck_
 
 ```hcl
 module "mig" {
@@ -59,7 +60,7 @@ module "mig" {
   instance_template   = module.instance_template.self_link_unique
   region              = "asia-northeast1"
   autoscaling_enabled = true
-  min_replicas        = 2
+  min_replicas        = 1
   hostname            = "test"
   environment         = "instance-group"
 
@@ -87,13 +88,13 @@ module "mig" {
   }
 }
 ```
-## Example: mig-simple
+## Example: _mig-simple_
 
 ```hcl
 module "mig" {
   source              = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
   region              = "asia-northeast1"
-  target_size         = 2
+  target_size         = 1
   hostname            = "test"
   environment         = "mig-simple"
   instance_template   = module.instance_template.self_link_unique
@@ -134,10 +135,10 @@ Each module may have specific outputs. You can retrieve these outputs by referen
 - `health_check_self_links` : The URL of the created resource.
 
 ## Examples
-For detailed examples on how to use this module, please refer to the [examples](https://github.com/cypik/terraform-gcp-instance-group/blob/master/example/mig) directory within this repository.
+For detailed examples on how to use this module, please refer to the [EXAMPLES](https://github.com/cypik/terraform-gcp-instance-group/tree/master/example/mig) directory within this repository.
 
 ## Author
-Your Name Replace '[License Name]' and '[Your Name]' with the appropriate license and your information. Feel free to expand this README with additional details or usage instructions as needed for your specific use case.
+Your Name Replace **'[License Name]'** and **'[Your Name]'** with the appropriate license and your information. Feel free to expand this README with additional details or usage instructions as needed for your specific use case.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/cypik/terraform-gcp-instance-group/blob/master/LICENSE) file for details.
