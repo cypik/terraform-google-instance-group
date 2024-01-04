@@ -75,7 +75,7 @@ module "mig" {
   source              = "../../../"
   region              = var.region
   hostname            = "test"
-  environment         = "mig-autoscaler"
+  environment         = "mig-autoscaling"
   autoscaling_enabled = var.autoscaling_enabled
   min_replicas        = var.min_replicas
   autoscaling_cpu     = var.autoscaling_cpu

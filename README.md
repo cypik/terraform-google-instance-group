@@ -9,12 +9,12 @@
 - [License](#license)
 
 ## Introduction
-This project deploys a Google Cloud infrastructure using Terraform to create **instance-group** .
+This project deploys a Google Cloud infrastructure using Terraform to create Instance-Group.
 ## Usage
 To use this module, you should have Terraform installed and configured for GCP. This module provides the necessary Terraform configuration for creating GCP resources, and you can customize the inputs as needed. Below is an example of how to use this module:
 ### Examples
 
-## Example: _mig-complete_
+## Example: _Complete_
 
 ```hcl
 module "mig" {
@@ -38,21 +38,21 @@ module "mig" {
 }
 ```
 
-## Example: _mig-autoscaler_
+## Example: _Autoscaling_
 
 ```hcl
 module "mig" {
   source              = "git::https://github.com/cypik/terraform-gcp-instance-group.git?ref=v1.0.0"
   region              = var.region
   hostname            = "test"
-  environment         = "mig-autoscaler"
+  environment         = "mig-autoscaling"
   autoscaling_enabled = var.autoscaling_enabled
   min_replicas        = var.min_replicas
   autoscaling_cpu     = var.autoscaling_cpu
   instance_template   = module.instance_template.self_link_unique
 }
 ```
-## Example: _mig-healthcheck_
+## Example: _Health-Check_
 
 ```hcl
 module "mig" {
@@ -88,7 +88,7 @@ module "mig" {
   }
 }
 ```
-## Example: _mig-simple_
+## Example: _Simple_
 
 ```hcl
 module "mig" {
@@ -116,14 +116,14 @@ This example demonstrates how to create various GCP resources using the provided
 - `environment` : The environment type.
 - `project_id` : The GCP project ID.
 - `region`: A reference to the region where the regional forwarding rule resides.
-- `min_replicas`: The minimum number of replicas that the autoscaler can scale down to.
+- `min_replicas`: The minimum number of replicas that the autoscaling can scale down to.
 - `autoscaling_cpu` : Defines the CPU utilization policy.
-- `health_check` : The health check resource that signals autohealing.
+- `health_check` : The health check resource that signals autoscaling.
 - `instance_template` : The full URL to an instance template from which all new instances of this version will be created.
 - `named_ports` : The named port configuration.
 - `target_pools` :  The full URL of all target pools to which new instances in the group are added.
 - `autoscaling_lb` : Configuration parameters of autoscaling based on a load balancer.
-- `min_replicas` : The minimum number of replicas that the autoscaler can scale down to.
+- `min_replicas` : The minimum number of replicas that the autoscaling can scale down to.
 
 ## Module Outputs
 Each module may have specific outputs. You can retrieve these outputs by referencing the module in your Terraform configuration.
@@ -135,7 +135,7 @@ Each module may have specific outputs. You can retrieve these outputs by referen
 - `health_check_self_links` : The URL of the created resource.
 
 ## Examples
-For detailed examples on how to use this module, please refer to the [EXAMPLES](https://github.com/cypik/terraform-gcp-instance-group/tree/master/example/mig) directory within this repository.
+For detailed examples on how to use this module, please refer to the [Examples](https://github.com/cypik/terraform-gcp-instance-group/tree/master/example/mig) directory within this repository.
 
 ## Author
 Your Name Replace **'[License Name]'** and **'[Your Name]'** with the appropriate license and your information. Feel free to expand this README with additional details or usage instructions as needed for your specific use case.
