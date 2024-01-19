@@ -8,9 +8,11 @@ provider "google" {
 ##### vpc module call.
 #####==============================================================================
 module "vpc" {
-  source                                    = "git::https://github.com/cypik/terraform-gcp-vpc.git?ref=v1.0.0"
+  source                                    = "cypik/vpc/google"
+  version                                   = "1.0.1"
   name                                      = "app"
   environment                               = "test"
+  routing_mode                              = "REGIONAL"
   network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
 }
 
@@ -18,7 +20,10 @@ module "vpc" {
 ##### subnet module call.
 #####==============================================================================
 module "subnet" {
-  source        = "git::https://github.com/cypik/terraform-gcp-subnet.git?ref=v1.0.0"
+  source        = "cypik/subnet/google"
+  version       = "1.0.1"
+  name          = "app"
+  environment   = "test"
   subnet_names  = ["subnet-a"]
   gcp_region    = "asia-northeast1"
   network       = module.vpc.vpc_id
@@ -29,16 +34,15 @@ module "subnet" {
 ##### firewall module call.
 #####==============================================================================
 module "firewall" {
-  source        = "git::https://github.com/cypik/terraform-gcp-firewall.git?ref=v1.0.0"
+  source        = "cypik/firewall/google"
+  version       = "1.0.1"
   name          = "app"
   environment   = "test"
   network       = module.vpc.vpc_id
-  priority      = 1000
   source_ranges = ["0.0.0.0/0"]
 
   allow = [
-    {
-      protocol = "tcp"
+    { protocol = "tcp"
       ports    = ["22", "80"]
     }
   ]
@@ -48,7 +52,8 @@ module "firewall" {
 ##### instance_template module call.
 #####==============================================================================
 module "instance_template" {
-  source               = "git::https://github.com/cypik/terraform-gcp-template-instance.git?ref=v1.0.0"
+  source               = "cypik/template-instance/google"
+  version              = "1.0.1"
   name                 = "template"
   environment          = "test"
   region               = "asia-northeast1"
@@ -73,12 +78,13 @@ module "instance_template" {
 #####==============================================================================
 module "mig" {
   source              = "../../../"
-  instance_template   = module.instance_template.self_link_unique
+  hostname            = "test"
+  environment         = "instance-group"
   region              = "asia-northeast1"
   autoscaling_enabled = true
   min_replicas        = 1
-  hostname            = "test"
-  environment         = "instance-group"
+  instance_template   = module.instance_template.self_link_unique
+
 
   autoscaling_cpu = [
     {

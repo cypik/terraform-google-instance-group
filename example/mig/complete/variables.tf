@@ -118,11 +118,13 @@ variable "autoscaling_enabled" {
 }
 
 variable "min_replicas" {
-  type    = number
-  default = 1
+  type        = number
+  default     = 1
+  description = "The minimum number of replicas for autoscaling."
 }
 
 variable "max_replicas" {
-  type    = number
-  default = 5
+  type        = number
+  default     = 5
+  description = "The maximum number of replicas for autoscaling."
 }
